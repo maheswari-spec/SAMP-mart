@@ -1,9 +1,15 @@
-import "./App.css";
+
+import './App.css'
+import Contact from './Components/Contact/Contact'
+import Cart from './Components/Shopping/Cart/Cart';
 
 function App() {
+
+
   return (
     <>
-      <p>Hello</p>
+   {/* <Contact/> */}
+   <Cart/>
     </>
   );
 }
