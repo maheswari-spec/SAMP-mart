@@ -1,10 +1,9 @@
-import "./App.css";
-import About from "./Components/About/About";
+import Login from "./Components/Login/Login";
 
 function App() {
   return (
     <>
-      <About/>
+      <Login />
     </>
   );
 }
