@@ -1,17 +1,14 @@
 
-import './App.css'
-import Contact from './Components/Contact/Contact'
-import Cart from './Components/Shopping/Cart/Cart';
+import Login from "./Components/Login/Login";
 
-function App() {
-
-
+const App = () => {
   return (
     <>
-   {/* <Contact/> */}
-   <Cart/>
+      <Login />
+      
+
     </>
   );
-}
+};
 
 export default App;
