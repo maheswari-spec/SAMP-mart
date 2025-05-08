@@ -1,11 +1,12 @@
 import Login from "./Components/Login/Login";
 
-function App() {
+const App = () => {
   return (
     <>
       <Login />
+      
     </>
   );
-}
+};
 
 export default App;
