@@ -10,6 +10,22 @@ export const Navbar = () => {
     localStorage.removeItem("authUser");
   }
 
+  function handleHomeClick() {
+    navigate("/home");
+  }
+
+  function handleContactClick() {
+    navigate("/contact");
+  }
+
+  function handleAboutClick() {
+    navigate("/about");
+  }
+
+  function handleProductClick() {
+    navigate("/product");
+  }
+
   return (
     <div className="bg-[#232422] z-50 h-[80px] fixed top-0 left-0 w-full flex items-center justify-between px-6 text-white">
       <div className="ml-6">
@@ -17,9 +33,30 @@ export const Navbar = () => {
       </div>
       <div className="mr-10">
         <ul className="flex gap-x-6">
-          <li className="cursor-pointer hover:text-[#dcf149]">Home</li>
-          <li className="cursor-pointer hover:text-[#dcf149]">Contact</li>
-          <li className="cursor-pointer hover:text-[#dcf149]">About us</li>
+          <li
+            onClick={handleHomeClick}
+            className="cursor-pointer hover:text-[#dcf149]"
+          >
+            Home
+          </li>
+          <li
+            onClick={handleProductClick}
+            className="cursor-pointer hover:text-[#dcf149]"
+          >
+            Product
+          </li>
+          <li
+            onClick={handleContactClick}
+            className="cursor-pointer hover:text-[#dcf149]"
+          >
+            Contact
+          </li>
+          <li
+            onClick={handleAboutClick}
+            className="cursor-pointer hover:text-[#dcf149]"
+          >
+            About us
+          </li>
           {user?.role === "admin" && (
             <li className="cursor-pointer hover:text-[#dcf149]">Dashboard</li>
           )}

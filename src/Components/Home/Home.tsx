@@ -5,6 +5,7 @@ import two from "../Assets/two pic.png";
 import three from "../Assets/threepic.png";
 import four from "../Assets/fourpic.png";
 import { Navbar } from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 
 const Home: React.FC = () => {
   return (
@@ -118,6 +119,7 @@ const Home: React.FC = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

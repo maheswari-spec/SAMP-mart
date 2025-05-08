@@ -28,3 +28,23 @@ export interface Product {
     reviewerEmail: string;
   }>;
 }
+
+export interface ProductItem extends Product {
+  returnPolicy: string;
+  minimumOrderQuantity: number;
+  meta: {
+    createdAt: string;
+    updatedAt: string;
+    barcode: string;
+    qrCode: string;
+  };
+  images: string[];
+}
+
+export type CartItem = {
+  id: string | number;
+  name: string;
+  price: number;
+  quantity: number;
+  images: string[];
+};

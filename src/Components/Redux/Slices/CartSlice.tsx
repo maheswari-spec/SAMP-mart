@@ -8,7 +8,6 @@ type CartItem = {
   name: string;
   price: number;
   quantity: number;
-  [key: string]: any;
 };
 
 type CartState = CartItem[];
