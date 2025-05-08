@@ -11,15 +11,24 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
+    let role = null;
     e.preventDefault();
     if (username === "admin" && password === "admin") {
-      setError("");
+      role = "admin";
+      navigate("/home");
+    } else if (username === "user" && password === "user") {
+      role = "user";
       navigate("/home");
     } else {
       setError("Incorrect username or password");
+    }
+
+    if (role) {
+      localStorage.setItem("authUser", JSON.stringify({ role }));
     }
   };
 
