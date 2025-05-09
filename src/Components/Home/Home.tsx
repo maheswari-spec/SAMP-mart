@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import mall from "../Assets/mall.png";
 import one from "../Assets/onepic.png";
 import two from "../Assets/two pic.png";
@@ -6,8 +6,28 @@ import three from "../Assets/threepic.png";
 import four from "../Assets/fourpic.png";
 import { Navbar } from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import { useDispatch } from "react-redux";
+import { setProductData } from "../Redux/Slices/DataSlice";
+import type { ApiResponse } from "../Types/Types";
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
+
+  async function fetchApi() {
+    const response = await fetch("https://dummyjson.com/products?limit=194");
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch products");
+    }
+
+    const data: ApiResponse = await response.json();
+    dispatch(setProductData(data.products));
+    console.log(data);
+  }
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
   return (
     <div>
       <Navbar />

@@ -48,3 +48,10 @@ export type CartItem = {
   quantity: number;
   images: string[];
 };
+
+export interface ApiResponse {
+  products: ProductItem[];
+  total: number;
+  skip: number;
+  limit: number;
+}

@@ -16,8 +16,19 @@ const dataSlice = createSlice({
     setProductData: (state, action: PayloadAction<ProductItem[]>) => {
       state.data = action.payload;
     },
+
+    updateProductPrice: (
+      state,
+      action: PayloadAction<{ id: number; value: number }>
+    ) => {
+      const { id, value } = action.payload;
+      const product = state.data.find((p) => p.id === id);
+      if (product) {
+        product.price = value;
+      }
+    },
   },
 });
 
-export const { setProductData } = dataSlice.actions;
+export const { setProductData, updateProductPrice } = dataSlice.actions;
 export default dataSlice.reducer;
