@@ -4,11 +4,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type CartItem = {
-  id: number | string;
+  id: string|number;
   name: string;
   price: number;
   quantity: number;
-  [key: string]: any;
+  images:string[]
 };
 
 type CartState = CartItem[];
@@ -31,7 +31,7 @@ const cartSlice = createSlice({
         toast.success("Added to cart");
       }
     },
-    removeItem(state, action: PayloadAction<string>) {
+    removeItem(state, action: PayloadAction<string|number>) {
       const newProducts = state.filter((item) => item.id !== action.payload);
       localStorage.setItem("cart", JSON.stringify([...newProducts]));
       return newProducts;
@@ -44,14 +44,14 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify([]));
       return [];
     },
-    increaseQuantity(state, action: PayloadAction<string>) {
+    increaseQuantity(state, action: PayloadAction<string|number>) {
       const item = state.find((item) => item.id == action.payload);
       if (item) {
         item.quantity += 1;
         localStorage.setItem("cart", JSON.stringify([...state]));
       }
     },
-    decreaseQuantity(state, action: PayloadAction<string>) {
+    decreaseQuantity(state, action: PayloadAction<string|number>) {
       const item = state.find((item) => item.id == action.payload);
       if (item && item.quantity > 1) {
         item.quantity -= 1;

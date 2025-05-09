@@ -1,8 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Product } from "../../Types/Types";
+import type { ProductItem } from "../../Types/Types";
 
 type ProductData = {
-  data: Product[];
+  data: ProductItem[];
 };
 
 const initialState: ProductData = {
@@ -13,7 +13,7 @@ const dataSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setProductData: (state, action: PayloadAction<Product[]>) => {
+    setProductData: (state, action: PayloadAction<ProductItem[]>) => {
       state.data = action.payload;
     },
   },
