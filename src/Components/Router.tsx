@@ -8,6 +8,7 @@ import ProductPage from "./Shopping/Product/Product";
 import About from "./About/About";
 import Contact from "./Contact/Contact";
 import { ProductDetail } from "./Shopping/Product/ProductDetail";
+import Cart from "./Shopping/Cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
     path: "/product/:id",
     element: <ProductDetail />,
   },
+  {
+    path:"/cart",
+    element:<Cart/>
+  }
 ]);
 
 export default router;
