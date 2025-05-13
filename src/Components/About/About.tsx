@@ -1,8 +1,14 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { Navbar } from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
+
+  function handleShopNowClick() {
+    navigate("/home");
+  }
   return (
     <div>
       <Navbar />
@@ -65,7 +71,10 @@ const About = () => {
           through every purchase.
         </p>
 
-        <button className="mt-8 bg-white hover:bg-[#dcf245] text-black font-semibold py-3 px-6 rounded-full shadow-md transition block mx-auto">
+        <button
+          onClick={handleShopNowClick}
+          className="mt-8 bg-white hover:bg-[#dcf245] text-black font-semibold py-3 px-6 rounded-full shadow-md transition block mx-auto"
+        >
           Go to Shopping
         </button>
       </div>

@@ -11,6 +11,8 @@ import { ProductDetail } from "./Shopping/Product/ProductDetail";
 import Cart from "./Shopping/Cart/Cart";
 import Dashboard from "./Dashboard/Dashboard";
 import AdminRoutes from "./Routers/AdminRoutes";
+import { AddNewProduct } from "./Dashboard/AddNewProduct";
+import { NotFound } from "./Not Found/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,18 @@ const router = createBrowserRouter([
         <Dashboard />
       </AdminRoutes>
     ),
+  },
+  {
+    path: "/dashboard/addnewproduct",
+    element: (
+      <AdminRoutes>
+        <AddNewProduct />
+      </AdminRoutes>
+    ),
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

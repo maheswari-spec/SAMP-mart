@@ -18,9 +18,9 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import type { AppDispatch, RootState } from "../../Redux/Store/Store";
+import type { RootState } from "../../Redux/Store/Store";
 import Footer from "../../Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import type { ProductItem } from "../../Types/Types";
@@ -54,14 +54,13 @@ export default function ProductPage() {
   const [filteredBrands, setFilteredBrands] = useState<string[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPriceValue, setMaxPriceValue] = useState<number>(10000);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
-
   // UI states
 
   const [priceInputMin, setPriceInputMin] = useState<string>("");
   const [priceInputMax, setPriceInputMax] = useState<string>("");
   const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
-  const [maxPriceValue, setMaxPriceValue] = useState<number>(100000);
   const [showAllBrands, setShowAllBrands] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
@@ -97,7 +96,7 @@ export default function ProductPage() {
         const prices = products.map((product) => product.price);
         setMinPrice(Math.min(...prices));
         setMaxPrice(Math.max(...prices));
-        setMaxPriceValue(Math.max(...prices) + 1000);
+        setMaxPriceValue(10000);
 
         setDisplayedProducts(products.slice(0, itemsToShow));
         setLoading(false);
@@ -332,25 +331,23 @@ export default function ProductPage() {
                 <div className="mb-4">
                   <Slider
                     value={priceSliderValue}
-                    onChange={(e, newValue) => {
+                    onChange={(_, newValue) => {
                       setPriceSliderValue(newValue as number);
-                      if (maxPrice) {
-                        const calculatedMax = Math.floor(
-                          ((newValue as number) / 100) * maxPriceValue
-                        );
-                        setPriceRange({
-                          min: null,
-                          max: calculatedMax > 0 ? calculatedMax : null,
-                        });
-                        setPriceInputMax(
-                          calculatedMax > 0 ? calculatedMax.toString() : ""
-                        );
-                      }
+                      const calculatedMax = Math.floor(
+                        ((newValue as number) / 100) * 10000
+                      );
+                      setPriceRange({
+                        min: null,
+                        max: calculatedMax > 0 ? calculatedMax : null,
+                      });
+                      setPriceInputMax(
+                        calculatedMax > 0 ? calculatedMax.toString() : ""
+                      );
                     }}
                     aria-label="Price range"
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) =>
-                      `₹${Math.floor((value / 100) * maxPriceValue)}`
+                      `$${Math.floor((value / 100) * 10000)}`
                     }
                   />
                 </div>
@@ -366,11 +363,11 @@ export default function ProductPage() {
                       onChange={(e) => setPriceInputMin(e.target.value)}
                     >
                       <MenuItem value="">Min</MenuItem>
-                      <MenuItem value="0">₹0</MenuItem>
-                      <MenuItem value="1000">₹1,000</MenuItem>
-                      <MenuItem value="5000">₹5,000</MenuItem>
-                      <MenuItem value="10000">₹10,000</MenuItem>
-                      <MenuItem value="20000">₹20,000</MenuItem>
+                      <MenuItem value="0">$0</MenuItem>
+                      <MenuItem value="50">$50</MenuItem>
+                      <MenuItem value="100">$100</MenuItem>
+                      <MenuItem value="500">$500</MenuItem>
+                      <MenuItem value="1000">$1,000</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -386,10 +383,11 @@ export default function ProductPage() {
                       onChange={(e) => setPriceInputMax(e.target.value)}
                     >
                       <MenuItem value="">Max</MenuItem>
-                      <MenuItem value="5000">₹5,000</MenuItem>
-                      <MenuItem value="10000">₹10,000</MenuItem>
-                      <MenuItem value="20000">₹20,000</MenuItem>
-                      <MenuItem value="30000">₹30,000+</MenuItem>
+                      <MenuItem value="100">$100</MenuItem>
+                      <MenuItem value="500">$500</MenuItem>
+                      <MenuItem value="1000">$1,000</MenuItem>
+                      <MenuItem value="5000">$5,000</MenuItem>
+                      <MenuItem value="10000">$10,000</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -631,13 +629,13 @@ export default function ProductPage() {
                           <div className="mt-auto">
                             <div className="flex items-center mb-2">
                               <span className="text-xl font-bold text-gray-900">
-                                ₹{product.price.toLocaleString()}
+                                ${product.price.toLocaleString()}
                               </span>
 
                               {product.discountPercentage && (
                                 <>
                                   <span className="ml-2 text-sm text-gray-500 line-through">
-                                    ₹
+                                    $
                                     {calculateOriginalPrice(
                                       product.price,
                                       product.discountPercentage
