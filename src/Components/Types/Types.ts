@@ -55,3 +55,11 @@ export interface ApiResponse {
   skip: number;
   limit: number;
 }
+
+export interface ReviewType {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
