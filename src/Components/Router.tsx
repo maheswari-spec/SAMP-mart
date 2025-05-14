@@ -13,6 +13,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import AdminRoutes from "./Routers/AdminRoutes";
 import { AddNewProduct } from "./Dashboard/AddNewProduct";
 import { NotFound } from "./Not Found/NotFound";
+import CheckOut from "./Shopping/Checkout/CheckOut";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
         <AddNewProduct />
       </AdminRoutes>
     ),
+  },
+  {
+    path: "/checkout",
+    element: <CheckOut />,
   },
   {
     path: "*",
