@@ -63,3 +63,11 @@ export interface ReviewType {
   reviewerName: string;
   reviewerEmail: string;
 }
+
+export type ContactForm = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
