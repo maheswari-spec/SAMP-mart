@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import mall from "../Assets/mall.png";
 import one from "../Assets/onepic.png";
 import two from "../Assets/two pic.png";
@@ -6,8 +6,38 @@ import three from "../Assets/threepic.png";
 import four from "../Assets/fourpic.png";
 import { Navbar } from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { setProductData } from "../Redux/Slices/DataSlice";
+import type { ApiResponse } from "../Types/Types";
+import type { RootState } from "../Redux/Store/Store";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.productData.data);
+  const navigate = useNavigate();
+
+  async function fetchApi() {
+    if (products.length > 1) return;
+
+    const response = await fetch("https://dummyjson.com/products?limit=194");
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch products");
+    }
+
+    const data: ApiResponse = await response.json();
+    dispatch(setProductData(data.products));
+  }
+
+  function handleProductRedirect() {
+    navigate("/product");
+  }
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -85,7 +115,10 @@ const Home: React.FC = () => {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/70 text-white flex flex-col justify-center items-center p-4 text-center transition-opacity duration-300">
                 <p className="text-sm leading-6">{item.description}</p>
                 {item.showButton && (
-                  <button className="mt-4 px-4 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition">
+                  <button
+                    onClick={handleProductRedirect}
+                    className="mt-4 px-4 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition"
+                  >
                     Explore More →
                   </button>
                 )}

@@ -9,6 +9,11 @@ import About from "./About/About";
 import Contact from "./Contact/Contact";
 import { ProductDetail } from "./Shopping/Product/ProductDetail";
 import Cart from "./Shopping/Cart/Cart";
+import Dashboard from "./Dashboard/Dashboard";
+import AdminRoutes from "./Routers/AdminRoutes";
+import { AddNewProduct } from "./Dashboard/AddNewProduct";
+import { NotFound } from "./Not Found/NotFound";
+import CheckOut from "./Shopping/Checkout/CheckOut";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +22,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-
     element: (
       <PublicRoutes>
         <Login />
@@ -58,12 +62,45 @@ const router = createBrowserRouter([
   },
   {
     path: "/product/:id",
-    element: <ProductDetail />,
+    element: (
+      <ProtetectedRoutes>
+        <ProductDetail />
+      </ProtetectedRoutes>
+    ),
   },
   {
-    path:"/cart",
-    element:<Cart/>
-  }
+    path: "/cart",
+    element: (
+      <ProtetectedRoutes>
+        <Cart />
+      </ProtetectedRoutes>
+    ),
+  },
+  {
+    path: "/dashboard",
+
+    element: (
+      <AdminRoutes>
+        <Dashboard />
+      </AdminRoutes>
+    ),
+  },
+  {
+    path: "/dashboard/addnewproduct",
+    element: (
+      <AdminRoutes>
+        <AddNewProduct />
+      </AdminRoutes>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: <CheckOut />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ]);
 
 export default router;

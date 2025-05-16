@@ -48,3 +48,26 @@ export type CartItem = {
   quantity: number;
   images: string[];
 };
+
+export interface ApiResponse {
+  products: ProductItem[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
+export interface ReviewType {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
+
+export type ContactForm = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+

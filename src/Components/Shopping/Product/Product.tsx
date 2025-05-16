@@ -18,20 +18,13 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useDispatch, useSelector } from "react-redux";
-import { setProductData } from "../../Redux/Slices/DataSlice";
+import { useSelector } from "react-redux";
 
-import type { AppDispatch, RootState } from "../../Redux/Store/Store";
+import type { RootState } from "../../Redux/Store/Store";
 import Footer from "../../Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import type { ProductItem } from "../../Types/Types";
-
-interface ApiResponse {
-  products: ProductItem[];
-  total: number;
-  skip: number;
-  limit: number;
-}
+import { Navbar } from "../../Navbar/Navbar";
 
 interface PriceRange {
   min: number | null;
@@ -40,7 +33,6 @@ interface PriceRange {
 
 // Main component
 export default function ProductPage() {
-  const dispatch = useDispatch<AppDispatch>();
   const products = useSelector((state: RootState) => state.productData.data);
   const [displayedProducts, setDisplayedProducts] = useState<ProductItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,14 +54,13 @@ export default function ProductPage() {
   const [filteredBrands, setFilteredBrands] = useState<string[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPriceValue, setMaxPriceValue] = useState<number>(10000);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
-
   // UI states
 
   const [priceInputMin, setPriceInputMin] = useState<string>("");
   const [priceInputMax, setPriceInputMax] = useState<string>("");
   const [priceSliderValue, setPriceSliderValue] = useState<number>(0);
-  const [maxPriceValue, setMaxPriceValue] = useState<number>(100000);
   const [showAllBrands, setShowAllBrands] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
@@ -80,23 +71,11 @@ export default function ProductPage() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          "https://dummyjson.com/products?limit=194"
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data: ApiResponse = await response.json();
-        dispatch(setProductData(data.products));
 
         // Extract and set available brands
         const brands = Array.from(
           new Set(
-            data.products
-              .map((product) => product.brand)
-              .filter(Boolean) as string[]
+            products.map((product) => product.brand).filter(Boolean) as string[]
           )
         );
         setAvailableBrands(brands.sort());
@@ -105,7 +84,7 @@ export default function ProductPage() {
         // Extract and set available categories
         const categories = Array.from(
           new Set(
-            data.products
+            products
               .map((product) => product.category)
               .filter(Boolean) as string[]
           )
@@ -114,12 +93,12 @@ export default function ProductPage() {
         setFilteredCategories(categories.sort());
 
         // Find min and max prices
-        const prices = data.products.map((product) => product.price);
+        const prices = products.map((product) => product.price);
         setMinPrice(Math.min(...prices));
         setMaxPrice(Math.max(...prices));
-        setMaxPriceValue(Math.max(...prices) + 1000);
+        setMaxPriceValue(10000);
 
-        setDisplayedProducts(data.products.slice(0, itemsToShow));
+        setDisplayedProducts(products.slice(0, itemsToShow));
         setLoading(false);
       } catch (err) {
         setError("Error fetching products. Please try again later.");
@@ -315,14 +294,12 @@ export default function ProductPage() {
 
   return (
     <div>
+      <Navbar />
       <div className="flex flex-col min-h-screen bg-gray-50">
         {/* Header with search */}
-        <header className="bg-white shadow-md py-4 px-6 sticky top-0 z-50">
+        <header className="bg-white shadow-md mt-[80px] py-4 px-6  ">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">
-              Product Catalog
-            </h1>
-            <div className="relative">
+            <div>
               <input
                 type="text"
                 placeholder="Search products by name, category, or brand..."
@@ -354,25 +331,23 @@ export default function ProductPage() {
                 <div className="mb-4">
                   <Slider
                     value={priceSliderValue}
-                    onChange={(e, newValue) => {
+                    onChange={(_, newValue) => {
                       setPriceSliderValue(newValue as number);
-                      if (maxPrice) {
-                        const calculatedMax = Math.floor(
-                          ((newValue as number) / 100) * maxPriceValue
-                        );
-                        setPriceRange({
-                          min: null,
-                          max: calculatedMax > 0 ? calculatedMax : null,
-                        });
-                        setPriceInputMax(
-                          calculatedMax > 0 ? calculatedMax.toString() : ""
-                        );
-                      }
+                      const calculatedMax = Math.floor(
+                        ((newValue as number) / 100) * 10000
+                      );
+                      setPriceRange({
+                        min: null,
+                        max: calculatedMax > 0 ? calculatedMax : null,
+                      });
+                      setPriceInputMax(
+                        calculatedMax > 0 ? calculatedMax.toString() : ""
+                      );
                     }}
                     aria-label="Price range"
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) =>
-                      `₹${Math.floor((value / 100) * maxPriceValue)}`
+                      `$${Math.floor((value / 100) * 10000)}`
                     }
                   />
                 </div>
@@ -388,11 +363,11 @@ export default function ProductPage() {
                       onChange={(e) => setPriceInputMin(e.target.value)}
                     >
                       <MenuItem value="">Min</MenuItem>
-                      <MenuItem value="0">₹0</MenuItem>
-                      <MenuItem value="1000">₹1,000</MenuItem>
-                      <MenuItem value="5000">₹5,000</MenuItem>
-                      <MenuItem value="10000">₹10,000</MenuItem>
-                      <MenuItem value="20000">₹20,000</MenuItem>
+                      <MenuItem value="0">$0</MenuItem>
+                      <MenuItem value="50">$50</MenuItem>
+                      <MenuItem value="100">$100</MenuItem>
+                      <MenuItem value="500">$500</MenuItem>
+                      <MenuItem value="1000">$1,000</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -408,10 +383,11 @@ export default function ProductPage() {
                       onChange={(e) => setPriceInputMax(e.target.value)}
                     >
                       <MenuItem value="">Max</MenuItem>
-                      <MenuItem value="5000">₹5,000</MenuItem>
-                      <MenuItem value="10000">₹10,000</MenuItem>
-                      <MenuItem value="20000">₹20,000</MenuItem>
-                      <MenuItem value="30000">₹30,000+</MenuItem>
+                      <MenuItem value="100">$100</MenuItem>
+                      <MenuItem value="500">$500</MenuItem>
+                      <MenuItem value="1000">$1,000</MenuItem>
+                      <MenuItem value="5000">$5,000</MenuItem>
+                      <MenuItem value="10000">$10,000</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -653,13 +629,13 @@ export default function ProductPage() {
                           <div className="mt-auto">
                             <div className="flex items-center mb-2">
                               <span className="text-xl font-bold text-gray-900">
-                                ₹{product.price.toLocaleString()}
+                                ${product.price.toLocaleString()}
                               </span>
 
                               {product.discountPercentage && (
                                 <>
                                   <span className="ml-2 text-sm text-gray-500 line-through">
-                                    ₹
+                                    $
                                     {calculateOriginalPrice(
                                       product.price,
                                       product.discountPercentage
