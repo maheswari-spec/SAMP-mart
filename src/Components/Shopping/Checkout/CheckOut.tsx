@@ -79,6 +79,7 @@ const CheckOut = () => {
             </Button>
 
             <Button
+              onClick={handleShoppingClick}
               variant="contained"
               sx={{
                 backgroundColor: '#dcf245',
