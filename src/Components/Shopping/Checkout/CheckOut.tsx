@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Modal, Box, Typography, Button, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import { useNavigate } from "react-router-dom";
+
 import {
   BUTTON_TEXT,
   modalStyle,
