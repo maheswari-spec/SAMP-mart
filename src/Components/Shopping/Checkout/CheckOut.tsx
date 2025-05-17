@@ -19,6 +19,15 @@ const CheckOut = () => {
     setOrderId(newOrderId);
     setOpen(true);
   };
+   const navigate = useNavigate();
+
+  function handleHomeClick() {
+    navigate("/home");
+  }
+
+  function handleShoppingClick() {
+    navigate("/product");
+  }
 
   const handleClose = () => setOpen(false);
 
