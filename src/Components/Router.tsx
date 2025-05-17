@@ -15,6 +15,7 @@ import { NotFound } from "./Not Found/NotFound";
 import CheckOut from "./Shopping/Checkout/CheckOut";
 import Registration from "./Register/Registration";
 import AdminRoutes from "./Routers/AdminRoutes";
+import UserProfile from "./Profile/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Registration />,
+  },
+  {
+    path: "/profile",
+    element: <UserProfile />,
   },
 ]);
 
