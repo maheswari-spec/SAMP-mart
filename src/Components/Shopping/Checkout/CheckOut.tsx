@@ -67,6 +67,7 @@ const CheckOut = () => {
 
           <Stack direction="row" spacing={2} mt={3} justifyContent="center">
             <Button
+               onClickCapture={handleHomeClick}
               variant="contained"
               onClick={handleClose}
               sx={{
