@@ -7,28 +7,25 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase/Firebase";
+
 const Login: React.FC = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(""); // Changed from username
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    let role = null;
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
-      role = "admin";
-      navigate("/home");
-    } else if (username === "user" && password === "user") {
-      role = "user";
-      navigate("/home");
-    } else {
-      setError("Incorrect username or password");
-    }
+    setError("");
 
-    if (role) {
-      localStorage.setItem("authUser", JSON.stringify({ role }));
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/home");
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in.");
     }
   };
 
@@ -49,10 +46,10 @@ const Login: React.FC = () => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400"
           />
           <input

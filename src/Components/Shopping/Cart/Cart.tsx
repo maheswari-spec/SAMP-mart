@@ -5,15 +5,18 @@ import { increaseQuantity } from "../../Redux/Slices/CartSlice";
 import { decreaseQuantity } from "../../Redux/Slices/CartSlice";
 import { Navbar } from "../../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Cart = () => {
   const cart = useSelector((state: RootState) => state.cart);
-
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const handleRemoveItem = (id: string | number) => {
     dispatch(removeItem(id));
@@ -28,8 +31,22 @@ const Cart = () => {
   };
 
   function handleBuyNow() {
-    navigate("/checkout");
+    if (isLoggedIn) {
+      navigate("/checkout");
+    } else {
+      navigate("/login");
+      toast.error(`Please log in to proceed`);
+    }
   }
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+
+    return () => unsubscribe();
+  });
 
   return (
     <>
