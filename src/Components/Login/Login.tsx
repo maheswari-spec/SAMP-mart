@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGoogle,
@@ -59,8 +59,13 @@ const Login: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400"
           />
-          <div className="text-right text-xs text-lime-300 mt-1 cursor-pointer hover:underline">
-            Forgot password?
+          <div className="text-right text-xs text-lime-300 mt-1 ">
+            <p>
+              Don't have an account?{" "}
+              <Link className="cursor-pointer hover:underline" to="/register">
+                Create an account
+              </Link>
+            </p>
           </div>
 
           {error && (

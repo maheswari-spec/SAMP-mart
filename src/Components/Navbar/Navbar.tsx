@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../Redux/Store/Store";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
@@ -20,6 +21,8 @@ export const Navbar = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   async function handleSignOut() {
     await signOut(auth);
@@ -61,6 +64,7 @@ export const Navbar = () => {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserDetails(user);
       setIsLoggedIn(!!user);
       if (user && user.email === "admin@gmail.com") {
         setIsAdmin(true);
@@ -71,6 +75,12 @@ export const Navbar = () => {
 
     return () => unsubscribe();
   }, []);
+
+  function handleProfileDetails() {
+    navigate("/profile");
+  }
+
+  console.log(userDetails?.displayName);
 
   return (
     <div className="bg-[#232422] z-50 h-[80px] fixed top-0 left-0 w-full flex items-center justify-between px-6 text-white">
@@ -133,12 +143,41 @@ export const Navbar = () => {
           </div>
         )}
         {isLoggedIn ? (
-          <li
-            onClick={handleSignOut}
-            className="cursor-pointer list-none hover:text-[#dcf149]"
-          >
-            Sign Out
-          </li>
+          <div className="relative">
+            <div
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <div className="bg-[#dcf149] text-black font-bold rounded-full h-8 w-8 flex items-center justify-center">
+                {userDetails?.displayName?.charAt(0)?.toUpperCase() || "U"}
+              </div>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={`transition-transform duration-200 ${
+                  dropdownOpen ? "rotate-180" : "rotate-0"
+                } text-sm`}
+              />
+            </div>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-md shadow-lg z-50">
+                <ul className="py-1">
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleProfileDetails}
+                  >
+                    Profile Details
+                  </li>
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleSignOut}
+                  >
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         ) : (
           <li
             onClick={handleSigninClick}
