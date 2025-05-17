@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import reg from "../Assets/reg.png";
-import logo from "../Assets/samplogo.png";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGoogle,
   faFacebook,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../Firebase/firebase";
+import { toast } from "react-toastify";
 
 const Registration: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -17,15 +20,22 @@ const Registration: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !email || !password || !confirmPassword) {
-      setError("All fields are required");
-    } else if (password !== confirmPassword) {
-      setError("Passwords do not match");
-    } else {
-      setError("");
-      navigate("/home");
+    if (password !== confirmPassword)
+      return toast.error("Passwords do not match");
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(userCredential.user, { displayName: username });
+      toast.success("Registered successfully");
+      navigate("/login");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

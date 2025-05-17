@@ -2,18 +2,19 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Login from "./Login/Login";
 import Home from "./Home/Home";
-import ProtetectedRoutes from "./Routers/ProtectedRoutes";
-import PublicRoutes from "./Routers/PublicRoutes";
+
 import ProductPage from "./Shopping/Product/Product";
 import About from "./About/About";
 import Contact from "./Contact/Contact";
 import { ProductDetail } from "./Shopping/Product/ProductDetail";
 import Cart from "./Shopping/Cart/Cart";
 import Dashboard from "./Dashboard/Dashboard";
-import AdminRoutes from "./Routers/AdminRoutes";
+
 import { AddNewProduct } from "./Dashboard/AddNewProduct";
 import { NotFound } from "./Not Found/NotFound";
 import CheckOut from "./Shopping/Checkout/CheckOut";
+import Registration from "./Register/Registration";
+import AdminRoutes from "./Routers/AdminRoutes";
 
 const router = createBrowserRouter([
   {
@@ -22,59 +23,31 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: (
-      <PublicRoutes>
-        <Login />
-      </PublicRoutes>
-    ),
+    element: <Login />,
   },
   {
     path: "/home",
-    element: (
-      <ProtetectedRoutes>
-        <Home />
-      </ProtetectedRoutes>
-    ),
+    element: <Home />,
   },
   {
     path: "/product",
-    element: (
-      <ProtetectedRoutes>
-        <ProductPage />
-      </ProtetectedRoutes>
-    ),
+    element: <ProductPage />,
   },
   {
     path: "/about",
-    element: (
-      <ProtetectedRoutes>
-        <About />
-      </ProtetectedRoutes>
-    ),
+    element: <About />,
   },
   {
     path: "/contact",
-    element: (
-      <ProtetectedRoutes>
-        <Contact />
-      </ProtetectedRoutes>
-    ),
+    element: <Contact />,
   },
   {
     path: "/product/:id",
-    element: (
-      <ProtetectedRoutes>
-        <ProductDetail />
-      </ProtetectedRoutes>
-    ),
+    element: <ProductDetail />,
   },
   {
     path: "/cart",
-    element: (
-      <ProtetectedRoutes>
-        <Cart />
-      </ProtetectedRoutes>
-    ),
+    element: <Cart />,
   },
   {
     path: "/dashboard",
@@ -87,6 +60,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/addnewproduct",
+
     element: (
       <AdminRoutes>
         <AddNewProduct />
@@ -100,6 +74,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFound />,
+  },
+  {
+    path: "/register",
+    element: <Registration />,
   },
 ]);
 

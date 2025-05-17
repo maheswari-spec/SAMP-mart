@@ -2,21 +2,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../Assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
-import type { RootState } from "../Redux/Store/Store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../Redux/Store/Store";
+
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+import { loggedOut } from "../Redux/Slices/AuthSlice";
+import { auth } from "../Firebase/Firebase";
+import { useEffect, useState } from "react";
 
 export const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("authUser") || "null");
-
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const cartItem = useSelector((state: RootState) => state.cart);
-
   const cartItemLen = cartItem.length;
 
-  function handleSignOut() {
-    navigate("/login");
-    localStorage.removeItem("authUser");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  async function handleSignOut() {
+    await signOut(auth);
+
+    dispatch(loggedOut());
   }
 
   function handleHomeClick() {
@@ -45,6 +53,24 @@ export const Navbar = () => {
 
   const location = useLocation();
   const isOnProductPage = location.pathname.startsWith("/product");
+
+  function handleSigninClick() {
+    navigate("/login");
+  }
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+      if (user && user.email === "admin@gmail.com") {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="bg-[#232422] z-50 h-[80px] fixed top-0 left-0 w-full flex items-center justify-between px-6 text-white">
@@ -79,7 +105,7 @@ export const Navbar = () => {
           >
             About us
           </li>
-          {user?.role === "admin" && (
+          {isAdmin && (
             <li
               onClick={handleDashboardClick}
               className="cursor-pointer hover:text-[#dcf149]"
@@ -106,13 +132,21 @@ export const Navbar = () => {
             )}
           </div>
         )}
-
-        <li
-          onClick={handleSignOut}
-          className="cursor-pointer list-none hover:text-[#dcf149]"
-        >
-          Sign Out
-        </li>
+        {isLoggedIn ? (
+          <li
+            onClick={handleSignOut}
+            className="cursor-pointer list-none hover:text-[#dcf149]"
+          >
+            Sign Out
+          </li>
+        ) : (
+          <li
+            onClick={handleSigninClick}
+            className="cursor-pointer list-none hover:text-[#dcf149]"
+          >
+            Sign In
+          </li>
+        )}
       </div>
     </div>
   );

@@ -1,12 +1,9 @@
-
-import Login from "./Components/Login/Login";
+import Home from "./Components/Home/Home";
 
 const App = () => {
   return (
     <>
-      <Login />
-      
-
+      <Home />
     </>
   );
 };
